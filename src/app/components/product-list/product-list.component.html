@@ -1,8 +1,25 @@
-<h1>Cart Total Price: ${{ total | number }}</h1>
+<h1 (click)="createNewProduct()">Cart Total Price: ${{ total | number }}</h1>
 <div class="products-grid">
   <app-product
     *ngFor="let product of products"
     [product]="product"
     (addedProduct)="addToCart($event)"
+    (showProductDetails)="getProductDetails($event)"
   />
 </div>
+<div class="product-detail" [class.active]="isProductDetailActive">
+  <div *ngIf="activeProductDetails">
+    <button (click)="toggleProductDetails()">close</button>
+    <h1>{{ activeProductDetails.title }}</h1>
+    <img
+      *ngFor="let image of activeProductDetails.images; let i = index"
+      [src]="image"
+      [alt]="i"
+    />
+    <h1>{{ activeProductDetails.description }}</h1>
+    <button (click)="updateProduct()">EDIT</button>
+    <button (click)="deleteProduct()">DELETE</button>
+  </div>
+</div>
+
+<button (click)="loadPaginatedProducts()">LOAD MORE PRODUCTS</button>

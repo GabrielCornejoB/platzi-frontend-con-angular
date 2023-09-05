@@ -12,6 +12,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ReversePipe } from './pipes/reverse.pipe';
 import { HighlightDirective } from './directives/highlight.directive';
 
+import { SwiperModule } from 'swiper/angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +24,13 @@ import { HighlightDirective } from './directives/highlight.directive';
     ReversePipe,
     HighlightDirective,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    SwiperModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
