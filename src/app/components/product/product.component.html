@@ -1,3 +1,4 @@
-<img [src]="product.image" [alt]="product.name" width="100" />
-<h2>${{ product.price | number }}</h2>
-<p>{{ product.name }}</p>
+<img [src]="product.image" [alt]="product.title" />
+<h2 appHighlight>{{ product.price | currency }}</h2>
+<p>{{ product.title }}</p>
+<button (click)="addToCart()">Add to cart</button>
