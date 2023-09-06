@@ -6,6 +6,7 @@ import {
   CreateProductDTO,
   UpdateProductDTO,
 } from 'src/app/models/product.model';
+import { enableTimeInterceptor } from '../../interceptors/time.interceptor';
 
 import { environment as env } from '../../../environments/environment';
 
@@ -30,6 +31,7 @@ export class ProductsService {
           limit,
           offset,
         },
+        context: enableTimeInterceptor(),
       })
       .pipe(
         retry(3),
