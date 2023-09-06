@@ -19,6 +19,9 @@
     <h1>{{ activeProductDetails.description }}</h1>
     <button (click)="updateProduct()">EDIT</button>
     <button (click)="deleteProduct()">DELETE</button>
+    <button (click)="readAndUpdate(activeProductDetails.id)">
+      Read & Update
+    </button>
   </div>
 </div>
 

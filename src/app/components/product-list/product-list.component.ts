@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { switchMap, zip } from 'rxjs';
 import {
   Product,
   CreateProductDTO,
@@ -33,6 +34,8 @@ export class ProductListComponent implements OnInit {
   limit: number = 10;
   offset: number = 0;
 
+  requestStatus: 'loading' | 'success' | 'error' | 'init' = 'init';
+
   constructor() {
     this.shoppingCart = this.storeService.getShoppingCart();
   }
@@ -49,15 +52,41 @@ export class ProductListComponent implements OnInit {
     this.total = this.storeService.getTotal();
   }
 
+  readAndUpdate(id: number) {
+    // this.productsService
+    //   .getProduct(id)
+    //   .pipe(
+    //     switchMap((product) =>
+    //       this.productsService.updateProduct(product.id, { title: 'change' })
+    //     )
+    //   )
+    //   .subscribe((data) => {
+    //     console.log(data);
+    //   });
+
+    zip(
+      this.productsService.getProduct(id),
+      this.productsService.updateProduct(id, { title: 'another change' })
+    ).subscribe((res) => console.log(res));
+  }
+
   toggleProductDetails() {
     this.isProductDetailActive = !this.isProductDetailActive;
   }
 
   getProductDetails(id: number) {
-    this.productsService.getProduct(id).subscribe((product) => {
-      this.toggleProductDetails();
-      this.activeProductDetails = product;
-    });
+    this.requestStatus = 'loading';
+    this.productsService.getProduct(id).subscribe(
+      (product) => {
+        this.toggleProductDetails();
+        this.activeProductDetails = product;
+        this.requestStatus = 'success';
+      },
+      (error) => {
+        console.log(error);
+        this.requestStatus = 'error';
+      }
+    );
   }
 
   createNewProduct() {

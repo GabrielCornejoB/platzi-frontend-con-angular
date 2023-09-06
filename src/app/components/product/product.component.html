@@ -1,5 +1,5 @@
 <img [src]="product.images[0]" [alt]="product.title" />
-<h2>{{ product.price | currency }}</h2>
+<h2>{{ product.price | currency }} - ({{ product.taxes | currency }})</h2>
 <p>{{ product.title }}</p>
 <button (click)="showDetails()">Details</button>
 <button (click)="addToCart()">Add to cart</button>

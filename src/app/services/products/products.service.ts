@@ -1,15 +1,15 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, retry } from 'rxjs';
+import { Observable, catchError, retry, throwError, map } from 'rxjs';
 import {
   Product,
   CreateProductDTO,
   UpdateProductDTO,
 } from 'src/app/models/product.model';
 
-// Link antiguo
-// const API_URL = 'https://young-sands-07814.herokuapp.com/api/products';
-const API_URL = 'https://api.escuelajs.co/api/v1/products/';
+import { environment as env } from '../../../environments/environment';
+
+const API_URL = `${env.API_URL}/api/v1/products/`;
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +24,6 @@ export class ProductsService {
   }
 
   getProductsByPage(limit: number, offset: number): Observable<Product[]> {
-    // let params = new HttpParams();
-    // params.set('limit', limit)
-    // params.set('offset',)
     return this.http
       .get<Product[]>(API_URL, {
         params: {
@@ -34,11 +31,22 @@ export class ProductsService {
           offset,
         },
       })
-      .pipe(retry(3));
+      .pipe(
+        retry(3),
+        map((products) =>
+          products.map((p) => ({ ...p, taxes: 0.19 * p.price }))
+        )
+      );
   }
 
   getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${API_URL}${id}`);
+    return this.http.get<Product>(`${API_URL}${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 500) return throwError('Error en el server');
+        if (error.status === 404) return throwError('Error pq no existe');
+        return throwError('Error timidito');
+      })
+    );
   }
 
   createProduct(dto: CreateProductDTO): Observable<Product> {
