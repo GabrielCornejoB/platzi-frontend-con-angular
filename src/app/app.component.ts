@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FilesService } from './services/files/files.service';
 
 @Component({
   selector: 'app-root',
@@ -6,14 +7,25 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  // createUser() {
-  //   this.usersService
-  //     .create({
-  //       name: 'GabrielC',
-  //       email: 'testmail@mail.com',
-  //       password: '12345A',
-  //       avatar: 'https://picsum.photos/640/640?r=5333',
-  //     })
-  //     .subscribe((data) => console.log(data));
-  // }
+  private fileService = inject(FilesService);
+
+  downloadPDF() {
+    this.fileService
+      .getFile(
+        'pdf-descargado.pdf',
+        'https://young-sands-07814.herokuapp.com/api/files/dummy.pdf',
+        'application/pdf'
+      )
+      .subscribe((ans) => console.log(ans));
+  }
+
+  uploadFile(event: Event) {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.item(0);
+    if (file) {
+      this.fileService
+        .uploadFile(file)
+        .subscribe((ans) => console.log(ans.location));
+    }
+  }
 }
