@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { switchMap, zip } from 'rxjs';
 import {
   Product,
@@ -13,11 +20,13 @@ import { StoreService } from 'src/app/services/store/store.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
   private storeService = inject(StoreService);
   private productsService = inject(ProductsService);
 
-  products: Product[] = [];
+  @Input() products: Product[] = [];
+  @Output() loadProductsEvent = new EventEmitter();
+
   shoppingCart: Product[] = [];
   total: number = 0;
 
@@ -31,20 +40,10 @@ export class ProductListComponent implements OnInit {
   };
   isProductDetailActive: boolean = false;
 
-  limit: number = 10;
-  offset: number = 0;
-
   requestStatus: 'loading' | 'success' | 'error' | 'init' = 'init';
 
   constructor() {
     this.shoppingCart = this.storeService.getShoppingCart();
-  }
-  ngOnInit(): void {
-    this.loadPaginatedProducts();
-
-    // this.productsService.getAllProducts().subscribe((res) => {
-    //   this.products = res;
-    // });
   }
 
   addToCart(product: Product) {
@@ -94,7 +93,7 @@ export class ProductListComponent implements OnInit {
       title: 'Nuevo producto',
       description: 'Descripción del nuevo producto',
       price: 1000,
-      categoryId: 2,
+      categoryId: 23,
       images: [
         'https://www.rimax.com.co/media/catalog/product/cache/59e5c732db92a740d29f32bacf696cea/2/5/2534_1.jpg',
       ],
@@ -134,13 +133,7 @@ export class ProductListComponent implements OnInit {
       });
   }
 
-  loadPaginatedProducts() {
-    this.productsService
-      .getProductsByPage(this.limit, this.offset)
-      .subscribe((data) => {
-        this.products =
-          this.products.length === 0 ? data : this.products.concat(data);
-        this.offset += this.limit;
-      });
+  loadMoreProducts() {
+    this.loadProductsEvent.emit();
   }
 }

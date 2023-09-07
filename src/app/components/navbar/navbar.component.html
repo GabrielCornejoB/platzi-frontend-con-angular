@@ -13,9 +13,10 @@
   <div class="side-menu" [class.active]="isSideMenuActive">
     <button (click)="toggleSideMenu()">Close</button>
     <ul>
-      <li><a href="">All</a></li>
-      <li><a href="">Clothes</a></li>
-      <li><a href="">Electronics</a></li>
+      <li><a routerLink="home">All</a></li>
+      <li *ngFor="let category of categories">
+        <a [routerLink]="['/category', category.id]">{{ category.name }}</a>
+      </li>
     </ul>
   </div>
 </div>
@@ -26,9 +27,14 @@
         <img src="/assets/logo_yard_sale.svg" alt="logo" />
       </a>
       <ul>
-        <li><a href="">All</a></li>
-        <li><a href="">Clothes</a></li>
-        <li><a href="">Electronics</a></li>
+        <li><a routerLink="home" routerLinkActive="active">All</a></li>
+        <li *ngFor="let category of categories">
+          <a
+            [routerLink]="['/category', category.id]"
+            routerLinkActive="active"
+            >{{ category.name }}</a
+          >
+        </li>
       </ul>
     </nav>
     <div class="info">
@@ -40,7 +46,7 @@
       </div>
 
       <div>
-        <a href="">
+        <a routerLink="cart">
           <img src="/assets/icon_shopping_cart.svg" alt="logo" />
         </a>
         <span class="counter">{{ counter }}</span>

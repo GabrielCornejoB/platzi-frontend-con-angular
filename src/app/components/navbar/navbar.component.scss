@@ -54,6 +54,12 @@
         margin: 0 0;
         color: inherit;
         text-decoration: none;
+        padding: 4px 8px;
+        &.active {
+          border: 1px solid #acd982;
+          color: #acd982;
+          border-radius: 5px;
+        }
       }
     }
   }

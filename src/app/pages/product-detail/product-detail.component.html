@@ -1,0 +1,10 @@
+<div class="page-product">
+  <a routerLink="/home">Go Back</a>
+  <div class="detail" *ngIf="product">
+    <div>
+      <h1>{{ product.title }}</h1>
+      <h2>{{ product.description }}</h2>
+      <h2>{{ product.price }}</h2>
+    </div>
+  </div>
+</div>
