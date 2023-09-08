@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { WebsiteRoutingModule } from './website-routing.module';
 import { LayoutComponent } from './components/layout/layout.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { CategoryComponent } from './pages/category/category.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MyCartComponent } from './pages/my-cart/my-cart.component';
@@ -13,12 +12,12 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { SharedModule } from '../shared/shared.module';
+import { QuicklinkModule } from 'ngx-quicklink';
 
 @NgModule({
   declarations: [
     NavbarComponent,
     HomeComponent,
-    CategoryComponent,
     MyCartComponent,
     LoginComponent,
     RegisterComponent,
@@ -27,6 +26,6 @@ import { SharedModule } from '../shared/shared.module';
     ProductDetailComponent,
     LayoutComponent,
   ],
-  imports: [CommonModule, WebsiteRoutingModule, SharedModule],
+  imports: [CommonModule, WebsiteRoutingModule, SharedModule, QuicklinkModule],
 })
 export class WebsiteModule {}
