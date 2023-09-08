@@ -4,6 +4,7 @@ export interface User {
   email: string;
   password: string;
   avatar: string;
+  role: string;
 }
 
 export interface CreateUserDTO extends Omit<User, 'id'> {}

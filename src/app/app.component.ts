@@ -1,13 +1,22 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FilesService } from './services/files/files.service';
+import { AuthService } from './services/auth/auth.service';
+import { TokenService } from './services/token/token.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private fileService = inject(FilesService);
+  private authService = inject(AuthService);
+  private tokenService = inject(TokenService);
+
+  public ngOnInit(): void {
+    const token = this.tokenService.getToken();
+    if (token) this.authService.getProfile().subscribe();
+  }
 
   downloadPDF() {
     this.fileService

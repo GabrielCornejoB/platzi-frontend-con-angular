@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 import { Auth } from 'src/app/models/auth.model';
 import { User } from 'src/app/models/user.model';
 import { environment } from 'src/environments/environment';
@@ -15,6 +15,9 @@ export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
 
+  private profile = new BehaviorSubject<User | null>(null);
+  public profile$ = this.profile.asObservable();
+
   constructor() {}
 
   login(email: string, password: string): Observable<Auth> {
@@ -25,8 +28,17 @@ export class AuthService {
     );
   }
 
+  logout() {
+    this.tokenService.deleteToken();
+    this.profile.next(null);
+  }
+
   getProfile(): Observable<User> {
-    return this.http.get<User>(`${API_URL}/profile`, {});
+    return this.http.get<User>(`${API_URL}/profile`, {}).pipe(
+      tap((user) => {
+        this.profile.next(user);
+      })
+    );
   }
 
   loginAndGetProfile(email: string, password: string): Observable<User> {
